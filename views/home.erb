@@ -23,9 +23,15 @@
               <a class="pure-menu-heading" href="/">Table of Contents</a>
 
               <ul class="pure-menu-list">
+                <%  def link_title(title)
+                      "<a href=""#"" class=""pure-menu-link""> #{title} </a>"
+                    end
+                %>
+
                 <li class="pure-menu-item">
-                  <a href="#" class="pure-menu-link">Chapter 1</a>
+                  <%= @table_of_contents.reduce("") { |string, title| string += link_title(title) } %>
                 </li>
+
               </ul>
           </div>
       </div>
@@ -42,7 +48,7 @@
           <div class="pure-menu">
             <ul class="pure-menu-list">
               <li class="pure-menu-item">
-                <a href="#" class="pure-menu-link">Chapter 1</a>
+                <%= @table_of_contents.reduce("") { |string, title| string += link_title(title) } %>
               </li>
             </ul>
           </div>
