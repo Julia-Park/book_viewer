@@ -20,9 +20,9 @@
           <a class="pure-menu-heading" href="/">Table of Contents</a>
 
           <ul class="pure-menu-list">
-            <% @table_of_contents.each do |chapter| %>
+            <% @table_of_contents.each_with_index do |chapter, i| %>
               <li class="pure-menu-item">
-                <a href="#" class="pure-menu-link"><%= chapter %></a>
+                <a href=<%= "/chapters/#{i + 1}" %> class="pure-menu-link"><%= "#{i + 1}. #{chapter}" %></a>
               </li>
             <% end %>
           </ul>
@@ -37,10 +37,46 @@
 
         <div class="content">
           <%= yield %>
+
+          <div class="navigation">
+            <%
+              prev_page, prev_link = 
+                if @number > 1
+                  ["&lt;&lt; Chapter #{@number - 1}", "/chapters/#{@number - 1}"] 
+                else
+                  ["&lt;&lt; Table of Contents", "/"]
+                end
+      
+              next_page, next_link =
+                if @number < 12
+                  ["Chapter #{@number + 1} &gt;&gt;", "/chapters/#{@number + 1}"]
+                else
+                  ["",""]
+                end
+            %>
+
+            <hr style="height:1px;background-color:#eee;border-width:0;color:#eee;">
+              <table style="width:100%;border-collapse:collapse;padding:0;border-spacing:0">
+                <tr>
+                  <% if @number > 0 %> 
+                    <td align="left" width=50%><a href= <%= prev_link %> class="pure-menu-link"><%= prev_page %></a></td> 
+                  <% end %>
+                  
+                  <td align="right" width=50%>
+                  <% if @number < 12 %>
+                    <a href= <%= next_link %> class="pure-menu-link"><%= next_page %></a>
+                  <% else %>
+                    End
+                  <% end %>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <script type="text/javascript" src="javascripts/ui.js"></script>
+    <script type="text/javascript" src="/javascripts/ui.js"></script>
   </body>
 </html>
