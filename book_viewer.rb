@@ -2,6 +2,12 @@ require "sinatra"
 require "sinatra/reloader"
 require 'tilt/erubis'
 
+helpers do
+  def in_paragraphs(string)
+    string.split("\n\n").inject("") { |text, line| text + "<p>#{line}</p>" }
+  end
+end
+
 before do
   @table_of_contents = File.readlines("data/toc.txt")
 end
@@ -16,7 +22,7 @@ end
 get "/chapters/:number" do
   @number = params[:number].to_i
   @title = "Chapter #{@number}: #{@table_of_contents[@number - 1]}"
-  @chapter = File.readlines("data/chp#{@number}.txt").join("<br>")
+  @chapter = File.read("data/chp#{@number}.txt")
   
   erb :chapter
 end
