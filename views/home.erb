@@ -4,7 +4,7 @@
   <ul class="pure-menu-list">
     <% @table_of_contents.each_with_index do |chapter, i| %>
       <li class="pure-menu-item">
-        <a href=<%= "/chapters/#{i + 1}" %> class="pure-menu-link"><%= "#{i + 1}. #{chapter}" %></a>
+        <a href=<%= "/chapters/#{i + 1}" %> class="pure-menu-link"><%= "Chapter #{i + 1}: #{chapter}" %></a>
       </li>
     <% end %>
   </ul>

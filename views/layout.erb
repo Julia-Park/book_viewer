@@ -22,7 +22,7 @@
           <ul class="pure-menu-list">
             <% @table_of_contents.each_with_index do |chapter, i| %>
               <li class="pure-menu-item">
-                <a href=<%= "/chapters/#{i + 1}" %> class="pure-menu-link"><%= "#{i + 1}. #{chapter}" %></a>
+                <a href=<%= "/chapters/#{i + 1}" %> class="pure-menu-link"><%= "#{i + 1}: #{chapter}" %></a>
               </li>
             <% end %>
           </ul>
@@ -48,7 +48,7 @@
                 end
       
               next_page, next_link =
-                if @number < 12
+                if @number < @table_of_contents.size
                   ["Chapter #{@number + 1} &gt;&gt;", "/chapters/#{@number + 1}"]
                 else
                   ["",""]
@@ -63,7 +63,7 @@
                   <% end %>
                   
                   <td align="right" width=50%>
-                  <% if @number < 12 %>
+                  <% if @number < @table_of_contents.size %>
                     <a href= <%= next_link %> class="pure-menu-link"><%= next_page %></a>
                   <% else %>
                     End
