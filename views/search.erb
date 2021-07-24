@@ -1,0 +1,19 @@
+<h2 class="content-subhead">Search</h2>
+
+<form action="/search" method="get">
+  <input name="query" value="<%= params[:query] %>">
+  <button type="submit">Search</button>
+</form>
+
+<div class="results">
+  <% if !@results.nil? && !@results.empty? %>
+    <h2 class="content-subhead">Results for '<%= params[:query]%>'</h2>
+    <ul>
+      <% @results.each do |title_idx, link| %>
+        <li><a href="<%= link %>" class="pure-menu-link"><%= @table_of_contents[title_idx] %></a></li>
+      <% end %>
+    </ul>
+  <% elsif !@results.nil? %>
+    <p>Sorry, no matches were found.</p>
+  <% end %>
+</div>

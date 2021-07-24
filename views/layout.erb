@@ -39,39 +39,41 @@
           <%= yield %>
 
           <div class="navigation">
-            <%
-              prev_page, prev_link = 
-                if @number > 1
-                  ["&lt;&lt; Chapter #{@number - 1}", "/chapters/#{@number - 1}"] 
-                else
-                  ["&lt;&lt; Table of Contents", "/"]
-                end
-      
-              next_page, next_link =
-                if @number < @table_of_contents.size
-                  ["Chapter #{@number + 1} &gt;&gt;", "/chapters/#{@number + 1}"]
-                else
-                  ["",""]
-                end
-            %>
+            <% if @number >= 0 %>
+              <%
+                prev_page, prev_link = 
+                  if @number > 1
+                    ["&lt;&lt; Chapter #{@number - 1}", "/chapters/#{@number - 1}"] 
+                  else
+                    ["&lt;&lt; Table of Contents", "/"]
+                  end
+        
+                next_page, next_link =
+                  if @number < @table_of_contents.size
+                    ["Chapter #{@number + 1} &gt;&gt;", "/chapters/#{@number + 1}"]
+                  else
+                    ["",""]
+                  end
+              %>
 
-            <hr style="height:1px;background-color:#eee;border-width:0;color:#eee;">
-              <table style="width:100%;border-collapse:collapse;padding:0;border-spacing:0">
-                <tr>
-                  <% if @number > 0 %> 
-                    <td align="left" width=50%><a href= <%= prev_link %> class="pure-menu-link"><%= prev_page %></a></td> 
-                  <% end %>
-                  
-                  <td align="right" width=50%>
-                  <% if @number < @table_of_contents.size %>
-                    <a href= <%= next_link %> class="pure-menu-link"><%= next_page %></a>
-                  <% else %>
-                    End
-                  <% end %>
-                  </td>
-                </tr>
-              </table>
-            </div>
+              <hr style="height:1px;background-color:#eee;border-width:0;color:#eee;">
+                <table style="width:100%;border-collapse:collapse;padding:0;border-spacing:0">
+                  <tr>
+                    <% if @number > 0 %> 
+                      <td align="left" width=50%><a href= <%= prev_link %> class="pure-menu-link"><%= prev_page %></a></td> 
+                    <% end %>
+                    
+                    <td align="right" width=50%>
+                    <% if @number < @table_of_contents.size %>
+                      <a href= <%= next_link %> class="pure-menu-link"><%= next_page %></a>
+                    <% else %>
+                      End
+                    <% end %>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            <% end %> 
           </div>
         </div>
       </div>
