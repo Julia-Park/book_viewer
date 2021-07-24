@@ -21,6 +21,8 @@ end
 
 get "/chapters/:number" do
   @number = params[:number].to_i
+  redirect "/" unless (1..@table_of_contents.size).cover?(@number)
+  
   @title = "Chapter #{@number}: #{@table_of_contents[@number - 1]}"
   @chapter = File.read("data/chp#{@number}.txt")
   
@@ -29,4 +31,8 @@ end
 
 get "/show/:name" do
   params[:name]
+end
+
+not_found do
+  redirect "/"
 end
