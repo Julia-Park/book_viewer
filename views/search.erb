@@ -9,8 +9,17 @@
   <% if !@results.nil? && !@results.empty? %>
     <h2 class="content-subhead">Results for '<%= params[:query]%>'</h2>
     <ul>
-      <% @results.each do |title_idx, link| %>
-        <li><a href="<%= link %>" class="pure-menu-link"><%= @table_of_contents[title_idx] %></a></li>
+      <% @results.each do |chapter_num, chapter_results| %>
+        <li>
+          <%= html_link(chapter_results["link"], chapter_results["title"], "class=""pure-menu-link""") %>
+          <ul>
+          <% chapter_results.each do |paragraph_num, paragraph| %>
+            <% if paragraph_num.class == Integer && paragraph_num > 0 %>
+              <li><%= link("#{chapter_results["link"]}##{paragraph_num}", paragraph) %></li>
+            <% end %>
+          <% end %>
+          </ul>
+        </li>
       <% end %>
     </ul>
   <% elsif !@results.nil? %>

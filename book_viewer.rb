@@ -8,28 +8,57 @@ before do
 end
 
 helpers do
-  def in_paragraphs(string)
-    string.split("\n\n").inject("") { |text, line| text + "<p>#{line}</p>" }
+  def format_html(paragraphs) # => string with <p> tags where id=paragraph idx
+    result = ""
+
+    paragraphs.each_with_index do |paragraph, idx|
+      result += "<p id=#{idx + 1}>#{paragraph}</p>"
+    end
+
+    result
   end
 
-  def contents(chapter_number)
-    File.read("data/chp#{chapter_number}.txt")
+  def contents(chapter_number) # => array of paragraphs
+    File.read("data/chp#{chapter_number}.txt").split("\n\n")
   end
 
-  def search_chapters(query) # return hash chp#: chp path
+  def search_chapters(query) # => hash {chp#: { 'title': ... , p_ix: paragraph  }}
     result = {}
     return result if query == ""
-    search_regexp = Regexp.new(query, Regexp::IGNORECASE)
+    search_term = Regexp.new(query, Regexp::IGNORECASE)
 
-    (1..@table_of_contents.size).each do |chapter_num|
-      if @table_of_contents[chapter_num - 1].match?(search_regexp) || contents(chapter_num).match?(search_regexp)
-        result[chapter_num - 1] = "/chapters/#{chapter_num}"
+    @table_of_contents.each_with_index do |title, title_idx|
+      chapter_num = title_idx + 1
+      if title.match?(search_term)
+        result[chapter_num] = 
+          { "title" => title, "link" => "/chapters/#{chapter_num}", 0 => "" }
+      end
+
+      contents(chapter_num).each_with_index do |paragraph, p_idx|
+        if paragraph.match?(search_term)
+          if result[chapter_num].nil?
+            result[chapter_num] = 
+              { "title" => title, "link" => "/chapters/#{chapter_num}", (p_idx + 1) => paragraph }
+          else 
+            result[chapter_num][p_idx + 1] = paragraph
+          end
+        end
       end
     end
 
     result
   end
+
+  def html_link(url, link_text, attributes = "")
+    "<a href=""#{url}"" #{attributes}>#{link_text}</a>"
+  end
 end
+
+# To link to specific paragraph for the term:
+# when searching, results must have the anchors
+# 3. When viewing results, links need link to anchors via ids
+# 4. When viewing results, links need to be further indented
+
 
 
 get "/" do
