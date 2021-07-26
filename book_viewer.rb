@@ -22,6 +22,10 @@ helpers do
     File.read("data/chp#{chapter_number}.txt").split("\n\n")
   end
 
+  def highlight(text, term)
+    text.gsub(term) { |match| "<strong>#{match}</strong>" }
+  end
+
   def search_chapters(query) # => hash {chp#: { 'title': ... , p_ix: paragraph  }}
     result = {}
     return result if query == ""
@@ -31,17 +35,18 @@ helpers do
       chapter_num = title_idx + 1
       if title.match?(search_term)
         result[chapter_num] = 
-          { "title" => title, "link" => "/chapters/#{chapter_num}", 0 => "" }
+          { "link" => "/chapters/#{chapter_num}" }
+        result[chapter_num]["title"] = highlight(title, search_term)
       end
 
       contents(chapter_num).each_with_index do |paragraph, p_idx|
         if paragraph.match?(search_term)
           if result[chapter_num].nil?
             result[chapter_num] = 
-              { "title" => title, "link" => "/chapters/#{chapter_num}", (p_idx + 1) => paragraph }
-          else 
-            result[chapter_num][p_idx + 1] = paragraph
+              { "title" => title, "link" => "/chapters/#{chapter_num}"}
           end
+          
+          result[chapter_num][p_idx + 1] = highlight(paragraph, search_term)
         end
       end
     end
@@ -53,13 +58,6 @@ helpers do
     "<a href=""#{url}"" #{attributes}>#{link_text}</a>"
   end
 end
-
-# To link to specific paragraph for the term:
-# when searching, results must have the anchors
-# 3. When viewing results, links need link to anchors via ids
-# 4. When viewing results, links need to be further indented
-
-
 
 get "/" do
   @title = 'The Adventures of Sherlock Holmes'

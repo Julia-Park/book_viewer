@@ -14,8 +14,8 @@
           <%= html_link(chapter_results["link"], chapter_results["title"], "class=""pure-menu-link""") %>
           <ul>
           <% chapter_results.each do |paragraph_num, paragraph| %>
-            <% if paragraph_num.class == Integer && paragraph_num > 0 %>
-              <li><%= link("#{chapter_results["link"]}##{paragraph_num}", paragraph) %></li>
+            <% if paragraph_num.class == Integer %>
+              <li><%= link("#{chapter_results["link"]}##{paragraph_num}", paragraph, "class=""pure-menu-link""") %></li>
             <% end %>
           <% end %>
           </ul>
